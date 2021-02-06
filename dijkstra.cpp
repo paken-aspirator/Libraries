@@ -21,7 +21,7 @@ namespace Library {
 		assert(0 <= start && start < graph.size());
 		priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>>que;
 		que.push({ start,0 });
-		vector<T>dist(graph.size(), (sizeof(T) <= 4 ? 1070000000 : 4610000000000000000ll));
+		vector<T>dist(graph.size(), 4611686015206162431);
 		dist[start] = 0;
 		while (!que.empty()) {
 			pair<int, T>front = que.top(); que.pop();
