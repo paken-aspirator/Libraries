@@ -20,7 +20,7 @@ namespace Library {
 	template<class T>vector<T>dijkstra(vector<vector<edge>>& graph, int start) {//到達不可能な時はINFを返す
 		assert(0 <= start && start < graph.size());
 		priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>>que;
-		que.push({ 0, start });
+		que.push({ start,0 });
 		vector<T>dist(graph.size(), 4611686015206162431);
 		dist[start] = 0;
 		while (!que.empty()) {
