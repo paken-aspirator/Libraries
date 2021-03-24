@@ -4,8 +4,8 @@
 #include <utility>
 using namespace std;
 
-std::random_device seed_gen;
-std::mt19937 engine(seed_gen());
+std::random_device seed_generate;
+std::mt19937 rand_gen(seed_generate());
 
 struct node {
 	int value, cnt, pri;
@@ -57,7 +57,7 @@ pair<node*, node*>split(node* np, int pos) {
 }
 node* insert(node*& np, int pos, int v) {
 	assert(0 <= pos && pos <= count(np));
-	node* m = new node(v, engine() & INT_MAX);
+	node* m = new node(v, rand_gen() & INT_MAX);
 	pair<node*, node*>p = split(np, pos);
 	return np = marge(marge(p.first, m), p.second);
 }
