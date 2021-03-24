@@ -2,6 +2,7 @@
 #include <climits>
 #include <random>
 #include <utility>
+using namespace std;
 
 std::random_device seed_gen;
 std::mt19937 engine(seed_gen());
