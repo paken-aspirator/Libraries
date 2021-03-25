@@ -31,14 +31,14 @@ int& get(node* np, int pos) {
 		}
 	}
 }
-node* marge(node* npl, node* npr) {
+node* merge(node* npl, node* npr) {
 	if (!npl || !npr)return !npl ? npr : npl;
 	if (npl->pri > npr->pri) {
-		npl->rch = marge(npl->rch, npr);
+		npl->rch = merge(npl->rch, npr);
 		return update(npl);
 	}
 	else {
-		npr->lch = marge(npl, npr->lch);
+		npr->lch = merge(npl, npr->lch);
 		return update(npr);
 	}
 }
@@ -59,10 +59,10 @@ node* insert(node*& np, int pos, int v) {
 	assert(0 <= pos && pos <= count(np));
 	node* m = new node(v, rand_gen() & INT_MAX);
 	pair<node*, node*>p = split(np, pos);
-	return np = marge(marge(p.first, m), p.second);
+	return np = merge(merge(p.first, m), p.second);
 }
 node* erase(node*& np, int pos) {
 	assert(pos < count(np));
 	pair<node*, node*>p = split(np, pos - 1);
-	return np = marge(p.first, split(p.second, 1).second);
+	return np = merge(p.first, split(p.second, 1).second);
 }
