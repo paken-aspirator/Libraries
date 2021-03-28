@@ -26,7 +26,7 @@ template <class S,
 	void apply(F x, int k, int l, int r) {
 		eval(k);
 		if (queryl <= l && r <= queryr) {
-			composition(lazy[k], x);
+			composition(x, lazy[k]);
 			eval(k);//これをしないと5行後詰む
 		}
 		else if (queryl < r && l < queryr) {
