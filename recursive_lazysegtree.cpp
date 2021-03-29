@@ -17,16 +17,16 @@ template <class S,
 	void eval(int k) {
 		if (lazy[k] == id())return;
 		if (k < limit) {
-			composition(lazy[k], lazy[k * 2]);
-			composition(lazy[k], lazy[k * 2 + 1]);
+			lazy[k * 2] = composition(lazy[k], lazy[k * 2]);
+			lazy[k * 2 + 1] = composition(lazy[k], lazy[k * 2 + 1]);
 		}
 		data[k] = mapping(lazy[k], data[k]);
 		lazy[k] = id();
 	}
-	void apply(F x, int k, int l, int r) {
+	void apply(F& x, int k, int l, int r) {
 		eval(k);
 		if (queryl <= l && r <= queryr) {
-			composition(x, lazy[k]);
+			lazy[k] = composition(x, lazy[k]);
 			eval(k);//これをしないと5行後詰む
 		}
 		else if (queryl < r && l < queryr) {
@@ -35,7 +35,7 @@ template <class S,
 			data[k] = op(data[k * 2], data[k * 2 + 1]);
 		}
 	}
-	S query(int k, int l, int r) {
+	S prod(int k, int l, int r) {
 		eval(k);
 		if (r <= queryl || queryr <= l) {
 			return e();
@@ -44,7 +44,7 @@ template <class S,
 			return data[k];
 		}
 		else {
-			return op(query(k * 2, l, (l + r) / 2), query(k * 2 + 1, (l + r) / 2, r));
+			return op(prod(k * 2, l, (l + r) / 2), prod(k * 2 + 1, (l + r) / 2, r));
 		}
 	}
 	public:
@@ -52,6 +52,7 @@ template <class S,
 			assert(0 <= N);
 			depth = 0;
 			while ((1 << depth) < size)depth++;
+			limit = (1 << depth);
 			data.resize(limit * 2, e());
 			lazy.resize(limit * 2, id());
 		}
@@ -73,19 +74,44 @@ template <class S,
 		S get(int pos) {
 			assert(0 <= pos && pos < size);
 			pos += limit;
-			for (int i = depth; i >= 0; depth--)eval(pos >> i);
+			for (int i = depth; i >= 0; i--)eval(pos >> i);
 			return data[pos];
 		}
-		void apply(int a,int b,F x) {
+		void apply(int a, int b, F x) {
 			assert(0 <= a && a <= b && b < size);
 			if (a == b)return;
 			queryl = a; queryr = b;
 			apply(x, 1, 0, limit);
 		}
-		S query(int a, int b) {
+		S prod(int a, int b) {
 			assert(0 <= a && a <= b && b < size);
 			if (a == b)return e();
 			queryl = a; queryr = b;
-			return query(1, 0, limit);
+			return prod(1, 0, limit);
+		}
+		void debug() {
+			rep(i, limit) {
+				cout <<right<<setw(2)<< data[i] << " ";
+			}
+			cout << endl;
+			for (int i = limit; i < 2 * limit; i++) {
+				cout << right << setw(2) << data[i] << " ";
+			}
+			cout << endl;
+			rep(i, limit) {
+				cout << right << setw(2) << lazy[i] << " ";
+			}
+			cout << endl;
+			for (int i = limit; i < 2 * limit; i++) {
+				cout << right << setw(2) << lazy[i] << " ";
+			}
+			cout << endl;
 		}
 };
+/*
+int op(int x, int y) { return max(x, y); }
+int e() {return 0; }
+int mapping(int x, int y) { return x; }
+int composition(int after, int now) { return after; }
+int id() {return -1; }
+*/
