@@ -29,7 +29,7 @@ template<class T>class SplayTree {
 		a->lch = np;
 		return a;
 	}
-	node* splay(node* np, int v) {
+	node* splay(node* np, T v) {
 		if (!np || np->val == v)return np;
 		if (v < np->val) {
 			if (!np->lch)return np;
@@ -68,10 +68,7 @@ template<class T>class SplayTree {
 		return np;
 	}
 	node* erase(node* np, T v) {
-		/*if (!np)return nullptr;
-		if (v < np->val)np->lch = erase(np->lch, v);
-		else */if (np->val < v)np->rch = erase(np->rch, v);
-		else if (!np->lch) {
+		if (!np->lch) {
 			node* q = np->rch;
 			delete np;
 			return q;
