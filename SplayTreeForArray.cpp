@@ -89,8 +89,8 @@ private:
 		}
 	}
 public:
-	T get(node*np, int pos) {
-		splay(np, pos);
+	T get(node *&np, int pos) {
+		np = splay(np, pos);
 		assert(np);
 		return np->val;
 	}
