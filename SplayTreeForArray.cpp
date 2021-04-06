@@ -11,32 +11,34 @@ template<class T>struct SplayTreeForArray {
 		node(T v) {
 			val = v;
 			cnt = 1;
-			lch = rch = nullptr;
+			lch = nullptr;
+			rch = nullptr;
 		}
 	};
 	int count(node* np) { return np ? np->cnt : 0; }
-	node* update(node* np) { np->cnt = count(np->lch) + count(np->rch) + 1; }
+	node* update(node* np) { np->cnt = count(np->lch) + count(np->rch) + 1; return np; }
 	node* root = nullptr;
 private:
 	node* rightRotate(node* np) {
 		node* a = np->lch;
 		np->lch = a->rch;
 		a->rch = np;
-		update(np); update(a);
-		return a;
+		update(np);
+		return update(a);
 	}
 	node* leftRotate(node* np) {
 		node* a = np->rch;
 		np->rch = a->lch;
 		a->lch = np;
-		update(np); update(a);
-		return a;
+		update(np);
+		return update(a);
 	}
 	node* erase_sub(node* np) {//rootの削除
+		if (!np)return nullptr;
 		if (!np->lch) {
 			node* q = np->rch;
 			delete np;
-			return update(q);
+			return q;
 		}
 		else if (!np->lch->rch) {
 			node* q = np->lch;
@@ -53,11 +55,10 @@ private:
 			r->lch = np->lch;
 			r->rch = np->rch;
 			delete np;
-			return r;
+			update(q);
+			return update(r);
 		}
-		return np;
 	}
-public:
 	node* splay(node* np, int pos) {//pos番目のノードをrootに
 		if (!np || count(np->lch) == pos)return np;
 		if (pos < count(np->lch)) {
@@ -86,30 +87,31 @@ public:
 			return (np->rch) ? leftRotate(np) : np;
 		}
 	}
-	T get(int pos) {
-		splay(root, pos);
-		assert(root);
-		return root->val;
+public:
+	T get(node*np, int pos) {
+		splay(np, pos);
+		assert(np);
+		return np->val;
 	}
-	node* insert(node* np, int pos, T v) {//node* np のpos番目に要素がvの要素を挿入
+	node* insert(node*& np, int pos, T v) {//node* np のpos番目に要素がvの要素を挿入
 		if (!np) {
 			node* q = new node(v);
-			return q;
+			return np=q;
 		}
-		if (count(np->lch) < pos)np->rch = insert_sub(np->rch, pos - count(np->lch) - 1, v);
-		else np->lch = insert_sub(np->lch, pos, v);
+		if (count(np->lch) < pos)np->rch = insert(np->rch, pos - count(np->lch) - 1, v);
+		else np->lch = insert(np->lch, pos, v);
 		return update(np);
 	}
-	void erase(int pos) {
-		splay(root, pos);
-		erase_sub(root);
+	void erase(node*& np,int pos) {
+		np = splay(np, pos);
+		np = erase_sub(np);
 		return;
 	}
 	pair<node*, node*>split(node* np, int pos) { //[0, pos), [pos, n)
 		insert(np, pos, T());
-		splay(np, pos);
+		np = splay(np, pos);
 		pair<node*, node*>p = { np->lch,np->rch };
-		erase_sub(np);
+		delete np;
 		return p;
 	}
 	node* merge(node* l, node* r) {
@@ -117,5 +119,11 @@ public:
 		np->lch = l;
 		np->rch = r;
 		return erase_sub(np);
+	}
+	void print(node* np) {
+		if (!np)return;
+		print(np->lch);
+		cout << np->val << " ";
+		print(np->rch);
 	}
 };
