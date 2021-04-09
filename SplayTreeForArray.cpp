@@ -109,17 +109,16 @@ public:
 		return;
 	}
 	pair<node*, node*>split(node* np, int pos) { //[0, pos), [pos, n)
-		insert(np, pos, T());
 		np = splay(np, pos);
-		pair<node*, node*>p = { np->lch,np->rch };
-		delete np;
+		pair<node*, node*>p = { np->lch,np };
+		np->lch = nullptr;
 		return p;
 	}
-	node* merge(node* l, node* r) {
-		node* np = new node(T());
-		np->lch = l;
-		np->rch = r;
-		return erase_sub(np);
+	node* merge(node*& l, node*& r) {
+		if(!r)return l;
+		r = splay(r, 0);
+		r->lch = l;
+		return r;
 	}
 	void print(node* np) {
 		if (!np)return;
