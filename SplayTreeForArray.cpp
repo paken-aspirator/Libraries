@@ -113,16 +113,18 @@ public:
 		return;
 	}
 	pair<node*, node*>split(node* np, int pos) { //[0, pos), [pos, n)
+		if (pos == np->cnt)return make_pair(np, nullptr);
 		np = splay(np, pos);
-		pair<node*, node*>p = { np->lch,np };
+		node* a = np->lch;
 		np->lch = nullptr;
-		return p;
+		update(np);
+		return make_pair(a, np);
 	}
-	node* merge(node*& l, node*& r) {
+	node* merge(node* l, node* r) {
 		if (!r)return l;
 		r = splay(r, 0);
 		r->lch = l;
-		return r;
+		return update(r);
 	}
 	void print(node* np) {
 		if (!np)return;
