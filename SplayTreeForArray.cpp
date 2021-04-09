@@ -4,7 +4,7 @@
 #include <utility>
 using namespace std;
 
-template<class T>struct SplayTreeForArray {
+template<class T>struct SplayTree {
 	struct node {
 		T val;
 		int cnt;
