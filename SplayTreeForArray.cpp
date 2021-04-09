@@ -34,32 +34,6 @@ private:
 		update(np);
 		return update(a);
 	}
-	node* erase_sub(node* np) {//rootの削除
-		if (!np)return nullptr;
-		if (!np->lch) {
-			node* q = np->rch;
-			delete np;
-			return q;
-		}
-		else if (!np->lch->rch) {
-			node* q = np->lch;
-			q->rch = np->rch;
-			delete np;
-			return update(q);
-		}
-		else {
-			node* q;
-			for (q = np->lch; q->rch->rch; q = q->rch)q->cnt--;
-			q->cnt--;
-			node* r = q->rch;
-			q->rch = r->lch;
-			r->lch = np->lch;
-			r->rch = np->rch;
-			delete np;
-			update(q);
-			return update(r);
-		}
-	}
 	node* splay(node* np, int pos) {//pos番目のノードをrootに
 		if (!np || count(np->lch) == pos)return np;
 		if (pos < count(np->lch)) {
@@ -88,22 +62,52 @@ private:
 			return (np->rch) ? leftRotate(np) : np;
 		}
 	}
-public:
-	T get(node *&np, int pos) {
-		np = splay(np, pos);
-		assert(np);
-		return np->val;
+	node* erase_sub(node* np) {//rootの削除
+		if (!np)return nullptr;
+		if (!np->lch) {
+			node* q = np->rch;
+			delete np;
+			return q;
+		}
+		else if (!np->lch->rch) {
+			node* q = np->lch;
+			q->rch = np->rch;
+			delete np;
+			return update(q);
+		}
+		else {
+			node* q;
+			for (q = np->lch; q->rch->rch; q = q->rch)q->cnt--;
+			q->cnt--;
+			node* r = q->rch;
+			q->rch = r->lch;
+			r->lch = np->lch;
+			r->rch = np->rch;
+			delete np;
+			update(q);
+			return update(r);
+		}
 	}
-	node* insert(node*& np, int pos, T v) {//node* np のpos番目に要素がvの要素を挿入
+	node* insert_sub(node*& np, int pos, T v) {//node* np のpos番目に要素がvの要素を挿入
 		if (!np) {
 			node* q = new node(v);
-			return np=q;
+			return np = q;
 		}
 		if (count(np->lch) < pos)np->rch = insert(np->rch, pos - count(np->lch) - 1, v);
 		else np->lch = insert(np->lch, pos, v);
 		return update(np);
 	}
-	void erase(node*& np,int pos) {
+public:
+	T get(node*& np, int pos) {
+		np = splay(np, pos);
+		assert(np);
+		return np->val;
+	}
+	node* insert(node*& np, int pos, T v) {//node* np のpos番目に要素がvの要素を挿入
+		np = splay(np, pos);
+		return np = insert_sub(np, pos, v);
+	}
+	void erase(node*& np, int pos) {
 		np = splay(np, pos);
 		np = erase_sub(np);
 		return;
@@ -115,7 +119,7 @@ public:
 		return p;
 	}
 	node* merge(node*& l, node*& r) {
-		if(!r)return l;
+		if (!r)return l;
 		r = splay(r, 0);
 		r->lch = l;
 		return r;
