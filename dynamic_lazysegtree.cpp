@@ -9,7 +9,7 @@ template <class S,
 	S(*mapping)(F, S),
 	F(*composition)(F, F),
 	F(*id)()>
-	class compressed_lazysegtree {
+	class dynamic_lazysegtree {
 	struct node {
 		S sum;
 		F lazy;
@@ -75,7 +75,7 @@ template <class S,
 		}
 	}
 	public:
-	compressed_lazysegtree(int N) {
+	dynamic_lazysegtree(int N) {
 		assert(0 < N);
 		depth = 0;
 		while ((1U << depth) < (unsigned int)(N)) depth++;
