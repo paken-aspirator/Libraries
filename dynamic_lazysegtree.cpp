@@ -28,7 +28,7 @@ template <class S,
 	S getsum(node* np) { return np ? np->sum : e(); }
 	void eval(node*& np, bool bo) {
 		if (np->lazy == id())return;
-		if (bo) {
+		if (bo) { //子に伝播
 			if (!np->child[0]) np->child[0] = new node();
 			np->child[0]->lazy = composition(np->lazy, np->child[0]->lazy);
 			if (!np->child[1])np->child[1] = new node();
@@ -108,6 +108,10 @@ template <class S,
 		if (l == r)return e();
 		queryl = l; queryr = r;
 		return prod(root, 0, limit);
+	}
+	S all_prod() {
+		eval(root, true);
+		return root->sum;
 	}
 };
 
