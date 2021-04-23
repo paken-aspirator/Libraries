@@ -39,7 +39,7 @@ template <class S,
 	}
 	void set(node*& np, int pos, int dep) {
 		if (!np) np = new node();
-		eval(np, 0 >= dep);
+		eval(np, dep >= 0);
 		if (dep == -1) {
 			np->sum = scopy;
 			return;
