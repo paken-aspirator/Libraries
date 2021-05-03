@@ -70,8 +70,7 @@ template <class S,
 			return np->sum;
 		}
 		else {
-			int a = op(prod(np->child[0], l, (l + r) / 2), prod(np->child[1], (l + r) / 2, r));
-			return a;
+			return op(prod(np->child[0], l, (l + r) / 2), prod(np->child[1], (l + r) / 2, r));
 		}
 	}
 	public:
