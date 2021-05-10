@@ -23,7 +23,7 @@ template <class S,
 	};
 	node* root = new node();
 	int limit, depth, queryl = 0, queryr = 0;
-	S scopy; F fcopy;
+	S scopy = S(); F fcopy = F();
 	
 	S getsum(node* np) { return np ? np->sum : e(); }
 	void eval(node*& np, bool bo) {
