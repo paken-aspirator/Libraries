@@ -80,6 +80,10 @@ template <class S,
 		while ((1U << depth) < (unsigned int)(N)) depth++;
 		limit = 1 << depth;
 	}
+	dynamic_lazysegtree() {
+		depth = 0;
+		limit = 1;
+	}
 	void set(int pos, S x) {
 		assert(0 <= pos && pos < limit);
 		scopy = x;
