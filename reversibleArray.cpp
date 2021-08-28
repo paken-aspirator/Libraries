@@ -83,15 +83,15 @@ namespace treap {
 }
 
 
-class reversibleArray {
+class reversible_array {
 	int size = 0;
 	treap::node* tre = nullptr, * rev = nullptr;
 	treap::node* splited_tre[3], * splited_rev[3];
 public:;
-	  reversibleArray() {
+	  reversible_array() {
 		  size = 0;
 	  }
-	  reversibleArray(vector<int>v) {
+	  reversible_array(vector<int>v) {
 		  size = v.size();
 		  for (int i = 0; i < v.size(); i++) {
 			  treap::insert(tre, i, v[i]);
